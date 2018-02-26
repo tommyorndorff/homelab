@@ -1,0 +1,57 @@
+---
+# This role installs base packages and utilities
+
+- name: install essentials (Redhat)
+  sudo: yes
+  when: ansible_os_family == "RedHat"
+  dnf:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - ansible
+    - bzip2 
+    - figlet
+    - git
+    - git-tools
+    - make 
+    - tmux
+    - unzip
+    - w3m
+    - zip
+    - mlocate
+    - curl
+    - telnet
+  tags: common
+
+- name: Install Zsh
+  dnf:
+    name: "zsh"
+    state: present
+  register: installation
+
+  #- name: Backing up existing ~/.zshrc
+  #  shell: if [ -f ~/.zshrc ]; then mv ~/.zshrc{,.orig}; fi
+  #  when: installation|success
+  #  sudo: no
+  #
+  #- name: Cloning  oh-my-zsh
+  #  git:
+  #    repo=https://github.com/robbyrussell/oh-my-zsh
+  #    dest=~/.oh-my-zsh
+  #  when: installation|success
+  #  register: cloning
+  #  sudo: no
+  #
+  #- name: Creating new ~/.zshrc
+  #  copy:
+  #    src=~/.oh-my-zsh/templates/zshrc.zsh-template
+  #    dest=~/.zshrc
+  #  when: cloning|success
+  #  sudo: no
+
+- name: install the rpmfusion repo packages
+  package: name={{ item }}
+       state=present
+  with_items:
+    - "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_current }}.noarch.rpm"
+    - "http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_current }}.noarch.rpm"

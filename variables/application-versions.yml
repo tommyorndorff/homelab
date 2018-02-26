@@ -1,0 +1,6 @@
+# This variables file contains the version numbers of software packages
+
+### OS versions
+fedora_previous: 26
+fedora_current: 27
+fedora_next: 28

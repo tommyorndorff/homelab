@@ -1,0 +1,15 @@
+---
+# This playbook configures basic settings for the w530 homelab
+
+- hosts: localhost
+  connection: local
+  become: true
+  vars_files:
+    - variables/application-versions.yml
+  tasks:
+    - name: install python and deps for ansible modules
+      raw: dnf install -y python2 python2-dnf libselinux-python
+  roles:
+    - common
+    - docker-ce
+    - docker-splunk 

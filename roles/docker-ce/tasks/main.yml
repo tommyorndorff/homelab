@@ -1,0 +1,32 @@
+---
+
+- name: Check if older docker versions are installed
+  package:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - docker
+    - docker-common
+    - docker-selinux
+    - docker-engine-selinux
+  tags: docker
+
+- name: Add the docker-ce repository
+  yum_repository:
+    name: docker-ce
+    description: Docker Community Edition repo
+    baseurl: https://download.docker.com/linux/fedora/docker-ce.repo
+  tags: docker
+
+- name: Install docker-ce from internet
+  dnf:
+    name: docker-ce
+    state: present
+  tags: docker
+
+- name: Ensure docker-ce service is enabled and starts at boot
+  service: 
+    name: docker
+    state: started
+    enabled: yes
+  tags: docker

@@ -1,0 +1,33 @@
+---
+# This task pulls and configures docker services/apps
+
+- name: Ensure the python2.7 docker package is installed
+  dnf:
+    name: python2-docker
+    state: present
+
+- name: Pull the officialy Splunk enterprise image
+  docker_image:
+    name: splunk/splunk:7.0.2
+  tags:
+    splunk
+    docker-services
+
+- name: Create the core Splunk Enterprise container
+  docker_container:
+    name: splunk-core
+    image: splunk/splunk:7.0.2
+    state: started
+    hostname: splunk-core
+    volumes:
+      - /data/splunk/etc:/opt/splunk/etc
+      - /data/splunk/var:/opt/splunk/var
+    ports:
+      - "8000:8000"
+      - "9997:9997"
+    env:
+      SPLUNK_START_ARGS: --accept-license
+    restart_policy: always
+  tags:
+    splunk
+    docker-services

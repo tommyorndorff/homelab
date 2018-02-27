@@ -12,4 +12,7 @@
   roles:
     - common
     - docker-ce
-    - docker-splunk 
+    - docker-splunk
+    - docker-cadvisor
+    - docker-collectorfordocker
+    - mssql-tools 

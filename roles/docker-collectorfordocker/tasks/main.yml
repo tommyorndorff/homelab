@@ -1,0 +1,26 @@
+---
+
+- name: Create the outcoldsolutions docker monitoring container
+  docker_container:
+    name: collectorfordocker
+    image: outcoldsolutions/collectorfordocker:3.0.86.180207
+    state: started
+    volumes:
+      - /sys/fs/cgroup:/rootfs/sys/fs/cgroup:ro
+      - /proc:/rootfs/proc:ro 
+      - /var/log:/rootfs/var/log:ro
+      - /var/lib/docker/containers/:/var/lib/docker/containers/:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - collector_data:/data
+    cpuset_cpus: 1
+    cpu_shares: 102
+    memory: 256M
+    restart_policy: always
+    privileged: yes
+    env:
+      COLLECTOR__SPLUNK_URL: "output.splunk__url=https://crunch.extra-ransom.net:8088/services/collector/event/1.0"
+      COLLECTOR__SPLUNK_TOKEN: "output.splunk__token=55687f6c-e410-458e-ad4f-63c2bd36b7f4"
+      COLLECTOR__SPLUNK_INSECURE: "output.splunk__insecure=true"
+      COLLECTOR__EULA: "general__acceptEULA=true"
+  tags:
+    docker-services

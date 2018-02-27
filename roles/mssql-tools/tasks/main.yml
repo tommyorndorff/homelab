@@ -1,0 +1,27 @@
+---
+# This role installs base packages and utilities
+# https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup-tools#RHEL
+
+- name: install the redhat family repo
+  copy:
+    src: prod.repo
+    dest: /etc/yum.repos.d/msprod.repo
+
+- name: Remove old packages 
+  sudo: yes
+  when: ansible_os_family == "RedHat"
+  dnf:
+    name: "{{ item }}"
+    state: absent 
+  with_items:
+    - unixODBC-utf16
+    - unixODBC-utf16-devel
+  tags: mssql
+
+- name: Install mssql tools 
+  dnf:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - mssql-tools
+    - unixODBC-devel

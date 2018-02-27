@@ -4,7 +4,7 @@
   docker_container:
     name: google-cadvisor
     image: google/cadvisor:latest
-    state: started
+    state: present
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -14,5 +14,5 @@
     ports:
       - "8080:8080"
     restart_policy: always
-    tags:
-      docker-services
+  tags:
+    docker-services
